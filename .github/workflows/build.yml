@@ -38,6 +38,13 @@ jobs:
           sed -i 's/^#\? *android.ndk *=.*/android.ndk = 25b/' buildozer.spec
           sed -i 's/^#\? *android.sdk *=.*/android.sdk = 34/' buildozer.spec
 
+      - name: Install Android SDK components
+        run: |
+          mkdir -p ~/.android
+          touch ~/.android/repositories.cfg
+          yes | sdkmanager --licenses || true
+          sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3"
+
       - name: Build APK
         run: buildozer -v android debug
 
