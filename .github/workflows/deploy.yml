@@ -40,13 +40,10 @@ jobs:
 
       - name: Install Android SDK components
         run: |
-          mkdir -p ANDROID_SDK_ROOT/cmdline-tools
-          cd ANDROID_SDK_ROOT/cmdline-tools
-          curl -o sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
-          unzip sdk-tools.zip -d latest
-          yes | ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=ANDROID_SDK_ROOT "build-tools;34.0.0" "platforms;android-34" "platform-tools"
-        env:
-          ANDROID_SDK_ROOT: ${{ runner.temp }}/android-sdk
+          mkdir -p ~/.android
+          touch ~/.android/repositories.cfg
+          yes | sdkmanager --licenses || true
+          sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3"
 
       - name: Build APK
         run: buildozer -v android debug
