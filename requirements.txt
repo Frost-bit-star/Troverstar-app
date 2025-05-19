@@ -1,0 +1,10 @@
+kivy==2.2.1
+kivymd==1.1.1
+android
+requests
+urllib3
+certifi
+chardet
+idna
+kivy-garden
+kivy-garden.garden-webview

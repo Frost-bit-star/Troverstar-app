@@ -1,0 +1,49 @@
+<SplashScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        Image:
+            source: 'splash.jpeg'
+            allow_stretch: True
+            keep_ratio: False
+            size_hint_y: 0.8
+
+        Label:
+            id: status
+            text: root.status.text
+            color: 0, 0, 0, 1
+            font_size: '18sp'
+            halign: 'center'
+            valign: 'middle'
+            size_hint_y: 0.1
+
+        Button:
+            id: retry_btn
+            text: root.retry_btn.text
+            size_hint: None, None
+            size: dp(180), dp(50)
+            pos_hint: {'center_x': 0.5}
+            opacity: root.retry_btn.opacity
+            on_press: root.retry_btn.dispatch('on_press')
+            background_color: (0.25, 0.6, 1, 1)
+            color: (1, 1, 1, 1)
+            bold: True
+            canvas.before:
+                Color:
+                    rgba: (0.25, 0.6, 1, 1)
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [10]
+
+<WebScreen>:
+    WebView:
+        url: 'https://trover.42web.io/app.php'
