@@ -13,7 +13,7 @@ package.domain = io.42web.trover
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,jpeg,kv,atlas,mp4
+source.include_exts = py,png,jpeg,kv,atlas,mp4,kivy==2.2.1,kivymd==1.1.1,android,requests,urllib3,certifi,chardet,idna,kivy-garden,kivy-garden.garden-webview
 
 # (list) List of inclusions using pattern matching
 #source.include_patterns = assets/*,images/*.png
