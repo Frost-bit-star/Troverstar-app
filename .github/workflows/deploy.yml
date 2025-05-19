@@ -1,0 +1,61 @@
+name: Build and Release APK
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build APK with Buildozer
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential git zip unzip openjdk-17-jdk python3-pip
+          pip install --upgrade pip
+          pip install cython buildozer==1.5.0
+
+      - name: Initialize Buildozer
+        run: |
+          [ -f buildozer.spec ] || buildozer init
+
+      - name: Configure Buildozer
+        run: |
+          sed -i 's/^#\? *android.permissions *=.*/android.permissions = INTERNET/' buildozer.spec
+          sed -i 's/^#\? *android.api *=.*/android.api = 33/' buildozer.spec
+          sed -i 's/^#\? *android.minapi *=.*/android.minapi = 23/' buildozer.spec
+          sed -i 's/^#\? *android.ndk *=.*/android.ndk = 25b/' buildozer.spec
+          sed -i 's/^#\? *android.sdk *=.*/android.sdk = 34/' buildozer.spec
+
+      - name: Install Android SDK components
+        run: |
+          mkdir -p ANDROID_SDK_ROOT/cmdline-tools
+          cd ANDROID_SDK_ROOT/cmdline-tools
+          curl -o sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
+          unzip sdk-tools.zip -d latest
+          yes | ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=ANDROID_SDK_ROOT "build-tools;34.0.0" "platforms;android-34" "platform-tools"
+        env:
+          ANDROID_SDK_ROOT: ${{ runner.temp }}/android-sdk
+
+      - name: Build APK
+        run: buildozer -v android debug
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: auto-release-github.run_number
+          name: Troverstar Release #{{ github.run_number }}
+          files: bin/*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
