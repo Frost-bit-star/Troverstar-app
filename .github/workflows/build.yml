@@ -33,7 +33,7 @@ jobs:
       - name: Configure Buildozer
         run: |
           sed -i 's/^#\? *android.permissions *=.*/android.permissions = INTERNET/' buildozer.spec
-          sed -i 's/^#\? *android.api *=.*/android.api = 33/' buildozer.spec
+          sed -i 's/^#\? *android.api *=.*/android.api = 34/' buildozer.spec
           sed -i 's/^#\? *android.minapi *=.*/android.minapi = 23/' buildozer.spec
           sed -i 's/^#\? *android.ndk *=.*/android.ndk = 25b/' buildozer.spec
           sed -i 's/^#\? *android.sdk *=.*/android.sdk = 34/' buildozer.spec
@@ -43,7 +43,7 @@ jobs:
           mkdir -p ~/.android
           touch ~/.android/repositories.cfg
           yes | sdkmanager --licenses || true
-          sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3" || echo "sdkmanager command not found"
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
       - name: Build APK
         run: buildozer -v android debug
